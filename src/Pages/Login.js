@@ -53,7 +53,7 @@ export default function Login() {
                                 {/* <h2>Your UID is : {user} </h2> */}
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     :
                     <div className="row text-center">
                         <div className="col">
