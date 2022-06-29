@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from '../Firebase/Firebase';
+import { auth } from '../config/firebase';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
     const initialData = { email: "", password: "" };
     const [state, setState] = useState(initialData);
     const [users, setUsers] = useState({});
-
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -26,6 +27,15 @@ export default function Login() {
         createUserWithEmailAndPassword(auth, email, password, name)
             .then((userCredential) => {
                 const user = userCredential.user;
+                toast.success('You are logged in', {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             })
             .catch((error) => {
                 console.error(error);
@@ -35,23 +45,33 @@ export default function Login() {
     const handleLogout = () => {
         signOut(auth).then(() => {
             setUsers({});
+            toast.success('You are logged out', {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }).catch((error) => {
             console.error(error);
         });
     }
     return (
-        <div className='login'>
+        <div className='login d-flex  align-items-center'>
+            <ToastContainer />
             <div className="container">
                 {
                     users.email ?
                         <div className="row">
                             <div className="col">
-                                <h2 className='text-center'>You are Logged In and Your Email is : {users.email} </h2><br /><br />
+                                <h2>You are Logged In and Your Email is : {users.email} </h2><br /><br />
                                 <button onClick={handleLogout} className="btn btn-danger text-center">Logout</button>
                             </div>
                         </div>
                         :
-                        <div className="row text-center">
+                        <div className="row">
                             <div className="col-12 col-md-6 offset-md-3 col-lg-8 md-2">
                                 <div className="card">
                                     <form onSubmit={submitHandler}>
